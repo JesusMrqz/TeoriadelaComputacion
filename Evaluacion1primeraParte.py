@@ -33,3 +33,4 @@ afd_ej2 = AFD(states, alphabet, transitions, 'q_par', {'q_par', 'q_par_b'})
 test_strings = ["aa", "ab", "abc", "ba", "ac"]
 for s in test_strings:
     print(f"Cadena '{s}': {'Aceptada' if afd_ej2.process(s) else 'Rechazada'}")
+
