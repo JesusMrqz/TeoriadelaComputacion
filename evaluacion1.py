@@ -1,39 +1,30 @@
-def acepta(afd, w):
-    estado = afd["inicio"]
-    rec = [estado]
-
-    for s in w:
-        if s not in afd["alfabeto"]:
-            return False, rec
-
-        if (estado, s) not in afd["delta"]:
-            return False, rec
-
-        estado = afd["delta"][(estado, s)]
-        rec.append(estado)
-
-    return (estado in afd["finales"]), rec
-
-
-def main():
-    afd = {
-        "alfabeto": {"a", "b"},
-        "inicio": "q0",
-        "finales": {"q2"},
-        "delta": {
-            ("q0", "a"): "q1",
-            ("q1", "a"): "q1",
-            ("q1", "b"): "q2"
+class Automata:
+    def __init__(self):
+        self.transiciones = {
+            'q0': {'a': 'q0', 'b': 'q1'},
+            'q1': {'a': 'q1', 'b': 'q2'},
+            'q2': {'a': 'q2', 'b': 'q2'}
         }
-    }
+        self.estado_final = 'q2'
 
-    w = input("Cadena (a,b): ").strip()
-    ok, rec = acepta(afd, w)
+    def validar(self, cadena):
+        estado = 'q0'
+        for simbolo in cadena:
+            if simbolo in self.transiciones[estado]:
+                estado = self.transiciones[estado][simbolo]
+            else:
+                return False
+        return estado == self.estado_final
 
-    print("Recorrido:", " -> ".join(rec))
-    print("ACEPTADA" if ok else "RECHAZADA")
+dfa = Automata()
 
+aceptadas = ["bb", "ababa", "baaaab"]
+rechazadas = ["a", "aba", "aaaaaa"]
 
-if __name__ == "__main__":
-    main()
- 
+print("--- CADENAS ACEPTADAS ---")
+for c in aceptadas:
+    print(f"'{c}': {dfa.validar(c)}")
+
+print("\n--- CADENAS RECHAZADAS ---")
+for r in rechazadas:
+    print(f"'{r}': {dfa.validar(r)}")
